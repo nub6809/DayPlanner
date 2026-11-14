@@ -1,0 +1,21 @@
+{
+  "name": "dayplanner",
+  "version": "1.0.0",
+  "description": "a working site to help you plan your day",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nub6809/DayPlanner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nub6809/DayPlanner/issues"
+  },
+  "homepage": "https://github.com/nub6809/DayPlanner#readme"
+}

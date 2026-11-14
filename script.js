@@ -9,14 +9,16 @@ function to_minutes(str) {
 document.getElementById("event-form").addEventListener("submit", function (e) {
     e.preventDefault();
     const title = document.getElementById("title").value.trim();
-    const block_start_time = document.getElementById("start-time").value;
-    const block_end_time = document.getElementById("end-time").value;
+    const block_start_time = document.getElementById("start").value;
+    const block_end_time = document.getElementById("end").value;
     
     const start_minutes = to_minutes(block_start_time);
     const end_minutes = to_minutes(block_end_time);
-    const block_size = (end_minutes - start_minutes) * px_per_min;
 
 
-    events.push({ title, start_minutes, end_minutes, block_size });
+    events.push({ title, start_minutes, end_minutes });
     renderEvents();
 });
+function renderEvents() {
+    console.log(events);
+}
