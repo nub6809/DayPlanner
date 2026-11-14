@@ -22,3 +22,23 @@ document.getElementById("event-form").addEventListener("submit", function (e) {
 function renderEvents() {
     console.log(events);
 }
+function format_hour(hour){
+    const suffix = hour < 12 ? "AM" : "PM";
+    const display = hour % 12 === 0 ? 12 : hour % 12;
+    return display + ":00 " + suffix;
+}
+function render_grid() {
+    planner.style.height = (grid_end - grid_start) + "px";
+    for (let hour = 0; hour < 24; hour++) {
+        let y = grid_start + hour * 60 * px_per_min;
+        const line = document.createElement("div");
+        line.className = "hour-line";
+        line.style.top = y + "px";
+        planner.appendChild(line);
+        const label = document.createElement("div");
+        label.className = "hour-label";
+        label.style.top = (y - 10) + "px";
+        label.textContent = format_hour(hour);
+        planner.appendChild(label);
+    }
+}
