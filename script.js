@@ -42,3 +42,4 @@ function render_grid() {
         planner.appendChild(label);
     }
 }
+render_grid();
