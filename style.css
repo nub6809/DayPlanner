@@ -1,11 +1,33 @@
-h1  {
+h1 {
     text-align: center;
     margin-top: 20px;
     font-size: 2em;
 }
+
 body {
     font-family: Arial, sans-serif;
     max-width: 700px;
     margin: 0 auto;
     padding: 0 16px;
+}
+
+#planner {
+    position: relative;
+    width: 800px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hour-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #ccc;
+}
+
+.hour-label {
+    position: absolute;
+    right: calc(100% + 75px);
+    white-space: nowrap;
+    transform: translateY(-50%);
 }
