@@ -1,6 +1,7 @@
 const px_per_min = 3;
 const grid_start = 200;  
 const grid_end = grid_start + 1440 * px_per_min;  
+const planner = document.getElementById("planner");
 let events = [];
 function to_minutes(str) {
     const parts = str.split(":");
@@ -42,4 +43,18 @@ function render_grid() {
         planner.appendChild(label);
     }
 }
-render_grid();
+function renderEvents() {
+    planner.innerHTML = "";
+    render_grid();
+    for (const event of events) {
+        const block = document.createElement("div");
+        block.className = "event";
+        const top = grid_start + event.start_minutes * px_per_min; 
+        const height = (event.end_minutes - event.start_minutes) * px_per_min;
+        block.style.top = top + "px";
+        block.style.height = height + "px";
+        block.textContent = event.title;
+        planner.appendChild(block);
+    }
+}
+renderEvents();
