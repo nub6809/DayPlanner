@@ -35,8 +35,6 @@ body {
     position: absolute;
     left: 8px;
     right: 8px;
-    background: #e8ecfd;
-    border-left: 4px solid #4f6bed;
     border-radius: 6px;
     padding: 4px 8px;
     box-sizing: border-box;

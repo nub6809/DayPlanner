@@ -3,25 +3,22 @@ const grid_start = 200;
 const grid_end = grid_start + 1440 * px_per_min;  
 const planner = document.getElementById("planner");
 let events = [];
-function to_minutes(str) {
-    const parts = str.split(":");
-    return Number(parts[0]) * 60 + Number(parts[1]);
-}
 document.getElementById("event-form").addEventListener("submit", function (e) {
     e.preventDefault();
     const title = document.getElementById("title").value.trim();
     const block_start_time = document.getElementById("start").value;
     const block_end_time = document.getElementById("end").value;
-    
+    const color = document.getElementById("color").value;      // add this
+
     const start_minutes = to_minutes(block_start_time);
     const end_minutes = to_minutes(block_end_time);
 
-
-    events.push({ title, start_minutes, end_minutes });
-    renderEvents();
+    events.push({ title, start_minutes, end_minutes, color }); // add color here
+    render_events();
 });
-function renderEvents() {
-    console.log(events);
+function to_minutes(str) {
+    const parts = str.split(":");
+    return Number(parts[0]) * 60 + Number(parts[1]);
 }
 function format_hour(hour){
     const suffix = hour < 12 ? "AM" : "PM";
@@ -43,18 +40,29 @@ function render_grid() {
         planner.appendChild(label);
     }
 }
-function renderEvents() {
+function render_events() {
     planner.innerHTML = "";
     render_grid();
     for (const event of events) {
+        const text_color = text_color_for(event.color);
         const block = document.createElement("div");
         block.className = "event";
         const top = grid_start + event.start_minutes * px_per_min; 
         const height = (event.end_minutes - event.start_minutes) * px_per_min;
+        block.style.background = event.color;
+        block.style.color = text_color;
         block.style.top = top + "px";
         block.style.height = height + "px";
         block.textContent = event.title;
         planner.appendChild(block);
     }
+    
 }
-renderEvents();
+function text_color_for(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 150 ? "black" : "white";
+}
+render_events();
