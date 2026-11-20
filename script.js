@@ -5,11 +5,11 @@ const grid_end = grid_start + 1440 * px_per_min;
 // DOM elements
 const planner = document.getElementById("planner");
 const warning = document.getElementById("warning");
-//event data
-let events = [];
-// event form submission
+// block data
+let block_data = [];
+// block form submission
 document.getElementById("event-form").addEventListener("submit", function (e) {
-    e.preventDefault(); // Prevent page from reloading when adding an event
+    e.preventDefault(); // Prevent page from reloading when adding a block
     const title = document.getElementById("title").value.trim();
     const block_start_time = document.getElementById("start").value;
     const block_end_time = document.getElementById("end").value;
@@ -19,13 +19,14 @@ document.getElementById("event-form").addEventListener("submit", function (e) {
     // builds the new block, check it for overlap, and only save it if it's clear
     const new_block = { title, start_minutes, end_minutes, color };
     if (anti_overlap(new_block)) {
-        // warning message for overlapping events
-        warning.textContent = "This is overlapping with prior events. Please choose a different time.";
+        // warning message for overlapping blocks
+        warning.textContent = "This is overlapping with prior blocks. Please choose a different time.";
         return;
     }
     warning.textContent = ""; // Clear the warning message if no overlap
-    events.push(new_block);
-    render_events();
+    
+    block_data.push(new_block);
+    render_blocks();
 });
 // converts time to minutes for easier calculations
 function to_minutes(str) {
@@ -51,58 +52,60 @@ function render_grid() {
         label.className = "hour-label";
         label.style.top = (y - 10) + "px";
         label.textContent = format_hour(hour);
+        planner.appendChild(block);
         planner.appendChild(label);
     }
 }
-// checks if the new event overlaps with any existing events
-function anti_overlap(event) {
-    for (const other of events) {
-        if (other === event) continue;
-        if (overlaps(event, other)) {
+// checks if the new block overlaps with any existing blocks
+function anti_overlap(block_data_item) {
+    for (const other of block_data) {
+        if (other === block_data_item) continue;
+        if (overlaps(block_data_item, other)) {
             return true;
         }
     }
     return false;
 }
 // helper for anti_overlap
-function overlaps(event1, event2) {
-    return event1.start_minutes < event2.end_minutes && event2.start_minutes < event1.end_minutes;
+function overlaps(block1, block2) {
+    return block1.start_minutes < block2.end_minutes && block2.start_minutes < block1.end_minutes;
 }
-//renders the events on the planner
-function render_events() {
-    planner.innerHTML = ""; // Clear existing events and grid to avoid duplicates.
+// renders the blocks on the planner
+function render_blocks() {
+    planner.innerHTML = ""; // Clear existing blocks and grid to avoid duplicates.
     //  each redraw would stack another copy of the grid and every block on top of the old ones.
     render_grid();
-    for (const event of events) {
-        const text_color = text_color_for(event.color);
+    for (const block_data_item of block_data) {
+        const text_color = text_color_for(block_data_item.color);
         const block = document.createElement("div");
         block.className = "event";
-        const top = grid_start + event.start_minutes * px_per_min;
-        const height = (event.end_minutes - event.start_minutes) * px_per_min;
-        block.style.background = event.color;
+        const top = grid_start + block_data_item.start_minutes * px_per_min;
+        const height = (block_data_item.end_minutes - block_data_item.start_minutes) * px_per_min;
+        block.style.background = block_data_item.color;
         block.style.color = text_color;
         block.style.top = top + "px";
         block.style.height = height + "px";
-        block.textContent = event.title;
+        block.textContent = block_data_item.title;
+        block.appendChild(delete_block_button(block_data_item));
         planner.appendChild(block);
     }
 }
-// creates a delete button for each event block
-function delete_event_button(event) {
+// creates a delete button for each block
+function delete_block_button(block_data_item) {
     const button = document.createElement("button");
     button.className = "delete-button";
     button.textContent = "×";
     button.addEventListener("click", function () {
-        delete_event(event);
+        delete_block(block_data_item);
     });
     return button;
 }
-// deletes events from the planner and the events array
-function delete_event(event) {
-    const index = events.indexOf(event);
+// deletes blocks from the planner and the block_data array
+function delete_block(block_data_item) {
+    const index = block_data.indexOf(block_data_item);
     if (index !== -1) {
-        events.splice(index, 1);
-        render_events();
+        block_data.splice(index, 1);
+        render_blocks();
     }
 }
 //color picker contrast helper function to determine whether to use black or white text based on the background color
@@ -113,4 +116,4 @@ function text_color_for(hex) {
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 150 ? "black" : "white";
 }
-render_events();
+render_blocks();
