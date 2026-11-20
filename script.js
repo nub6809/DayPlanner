@@ -52,7 +52,6 @@ function render_grid() {
         label.className = "hour-label";
         label.style.top = (y - 10) + "px";
         label.textContent = format_hour(hour);
-        planner.appendChild(block);
         planner.appendChild(label);
     }
 }
