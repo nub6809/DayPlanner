@@ -1,7 +1,7 @@
 // grid dimensions and scaling
 const px_per_min = 3;
-const grid_start = 200;  
-const grid_end = grid_start + 1440 * px_per_min;  
+const grid_start = 200;
+const grid_end = grid_start + 1440 * px_per_min;
 // DOM elements
 const planner = document.getElementById("planner");
 const warning = document.getElementById("warning");
@@ -13,17 +13,18 @@ document.getElementById("event-form").addEventListener("submit", function (e) {
     const title = document.getElementById("title").value.trim();
     const block_start_time = document.getElementById("start").value;
     const block_end_time = document.getElementById("end").value;
-    const color = document.getElementById("color").value;      
+    const color = document.getElementById("color").value;
     const start_minutes = to_minutes(block_start_time);
     const end_minutes = to_minutes(block_end_time);
-
-    const new_block = { title, start_minutes, end_minutes, color }; //dummy event object used for overlap checking
+    // builds the new block, check it for overlap, and only save it if it's clear
+    const new_block = { title, start_minutes, end_minutes, color };
     if (anti_overlap(new_block)) {
-    warning.textContent = "This is overlapping with prior events. Please choose a different time.";
-    return;
-}
-warning.textContent = ""; // Clear the warning message if no overlap
-events.push(new_block);
+        // warning message for overlapping events
+        warning.textContent = "This is overlapping with prior events. Please choose a different time.";
+        return;
+    }
+    warning.textContent = ""; // Clear the warning message if no overlap
+    events.push(new_block);
     render_events();
 });
 // converts time to minutes for easier calculations
@@ -32,7 +33,7 @@ function to_minutes(str) {
     return Number(parts[0]) * 60 + Number(parts[1]);
 }
 // displays the hour in 12-hour format with AM/PM for grid labels
-function format_hour(hour){
+function format_hour(hour) {
     const suffix = hour < 12 ? "AM" : "PM";
     const display = hour % 12 === 0 ? 12 : hour % 12;
     return display + ":00 " + suffix;
@@ -73,11 +74,10 @@ function render_events() {
     //  each redraw would stack another copy of the grid and every block on top of the old ones.
     render_grid();
     for (const event of events) {
-        
         const text_color = text_color_for(event.color);
         const block = document.createElement("div");
         block.className = "event";
-        const top = grid_start + event.start_minutes * px_per_min; 
+        const top = grid_start + event.start_minutes * px_per_min;
         const height = (event.end_minutes - event.start_minutes) * px_per_min;
         block.style.background = event.color;
         block.style.color = text_color;
@@ -86,7 +86,6 @@ function render_events() {
         block.textContent = event.title;
         planner.appendChild(block);
     }
-    
 }
 //color picker contrast helper function to determine whether to use black or white text based on the background color
 function text_color_for(hex) {
