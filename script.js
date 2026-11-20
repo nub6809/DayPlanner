@@ -87,6 +87,24 @@ function render_events() {
         planner.appendChild(block);
     }
 }
+// creates a delete button for each event block
+function delete_event_button(event) {
+    const button = document.createElement("button");
+    button.className = "delete-button";
+    button.textContent = "×";
+    button.addEventListener("click", function () {
+        delete_event(event);
+    });
+    return button;
+}
+// deletes events from the planner and the events array
+function delete_event(event) {
+    const index = events.indexOf(event);
+    if (index !== -1) {
+        events.splice(index, 1);
+        render_events();
+    }
+}
 //color picker contrast helper function to determine whether to use black or white text based on the background color
 function text_color_for(hex) {
     const r = parseInt(hex.slice(1, 3), 16);
