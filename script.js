@@ -2,18 +2,25 @@ const px_per_min = 3;
 const grid_start = 200;  
 const grid_end = grid_start + 1440 * px_per_min;  
 const planner = document.getElementById("planner");
+const warning = document.getElementById("warning");
 let events = [];
 document.getElementById("event-form").addEventListener("submit", function (e) {
     e.preventDefault();
     const title = document.getElementById("title").value.trim();
     const block_start_time = document.getElementById("start").value;
     const block_end_time = document.getElementById("end").value;
-    const color = document.getElementById("color").value;      // add this
+    const color = document.getElementById("color").value;      
 
     const start_minutes = to_minutes(block_start_time);
     const end_minutes = to_minutes(block_end_time);
 
-    events.push({ title, start_minutes, end_minutes, color }); // add color here
+    const new_block = { title, start_minutes, end_minutes, color };
+if (anti_overlap(new_block)) {
+    warning.textContent = "This is overlapping with prior events. Please choose a different time.";
+    return;
+}
+warning.textContent = "";
+events.push(new_block);
     render_events();
 });
 function to_minutes(str) {
@@ -40,10 +47,23 @@ function render_grid() {
         planner.appendChild(label);
     }
 }
+function anti_overlap(event) {
+    for (const other of events) {
+        if (other === event) continue;
+        if (overlaps(event, other)) {
+            return true;
+        }
+    }
+    return false;
+}
+function overlaps(event1, event2) {
+    return event1.start_minutes < event2.end_minutes && event2.start_minutes < event1.end_minutes;
+}
 function render_events() {
     planner.innerHTML = "";
     render_grid();
     for (const event of events) {
+        
         const text_color = text_color_for(event.color);
         const block = document.createElement("div");
         block.className = "event";
