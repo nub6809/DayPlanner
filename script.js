@@ -6,7 +6,7 @@ const grid_end = grid_start + 1440 * px_per_min;
 const planner = document.getElementById("planner");
 const warning = document.getElementById("warning");
 // block data
-let block_data = [];
+let block_data = JSON.parse(localStorage.getItem("day_plan")) || [];
 // block form submission
 document.getElementById("event-form").addEventListener("submit", function (e) {
     e.preventDefault(); // Prevent page from reloading when adding a block
@@ -114,5 +114,9 @@ function text_color_for(hex) {
     const b = parseInt(hex.slice(5, 7), 16);
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 150 ? "black" : "white";
+}
+// day plan saving and loading functions
+function save_day_plan() {
+    localStorage.setItem("day_plan", JSON.stringify(block_data));
 }
 render_blocks();
