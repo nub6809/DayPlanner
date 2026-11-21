@@ -5,6 +5,11 @@ const grid_end = grid_start + 1440 * px_per_min;
 // DOM elements
 const planner = document.getElementById("planner");
 const warning = document.getElementById("warning");
+const message = document.getElementById("message");
+const archive_panel = document.getElementById("archive");
+const archive_toggle = document.getElementById("archive-toggle");
+const archive_close = document.getElementById("archive-close");
+const archive_list = document.getElementById("archive-list");
 // block data
 let block_data = JSON.parse(localStorage.getItem("day_plan")) || [];
 // block form submission
@@ -53,6 +58,40 @@ function render_grid() {
         label.style.top = (y - 10) + "px";
         label.textContent = format_hour(hour);
         planner.appendChild(label);
+    }
+}
+// opens or closes the archive sidebar, refreshing the list each time
+archive_toggle.addEventListener("click", function () {
+    archive_panel.classList.toggle("open");
+    render_archive();
+});
+
+// closes the archive sidebar
+archive_close.addEventListener("click", function () {
+    archive_panel.classList.remove("open");
+});
+// draws a button for each archived day plan in the sidebar
+function render_archive() {
+    const archive = JSON.parse(localStorage.getItem("day_plan_archive")) || [];
+    archive_list.innerHTML = "";   // clear old buttons to avoid duplicates
+
+    if (archive.length === 0) {
+        archive_list.textContent = "No saved plans yet.";
+        return;
+    }
+
+    for (let i = archive.length - 1; i >= 0; i--) {   // newest first
+        const item = archive[i];
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "archive-button";
+        button.textContent = item.date + " (" + item.blocks.length + " blocks)";
+        button.addEventListener("click", function () {
+            load_archived_plan(i);
+        });
+        li.appendChild(button);
+        archive_list.appendChild(li);
     }
 }
 // checks if the new block overlaps with any existing blocks
@@ -122,9 +161,30 @@ function save_day_plan() {
 // button to save the day plan to localStorage
 document.getElementById("save-button").addEventListener("click", function () {
     save_day_plan();
+    archive_day_plan();
     message.textContent = "Day plan saved!";
     setTimeout(function () {
         message.textContent = "";
     }, 2000);
 });
-render_blocks();
+// storing saved day plans in an archive for future retrieval
+function archive_day_plan() {
+    const archive = JSON.parse(localStorage.getItem("day_plan_archive")) || [];
+    const date = new Date().toLocaleDateString();
+    const entry = { date, blocks: block_data };
+    const existing_day_plans = archive.findIndex(function (item) { return item.date === date; });
+    if (existing_day_plans === -1) {
+        archive.push(entry);
+    } else {
+        archive[existing_day_plans] = entry;    
+    }
+    localStorage.setItem("day_plan_archive", JSON.stringify(archive));
+}
+// load archived day plan into the planner
+function load_archived_plan(index) {
+    const archive = JSON.parse(localStorage.getItem("day_plan_archive")) || [];
+    block_data = archive[index].blocks;
+    render_blocks();
+    archive_panel.classList .remove("open");
+}
+render_blocks(); // Initial render of the planner

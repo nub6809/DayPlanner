@@ -201,8 +201,104 @@ h1 {
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
 }
+/* ===== Archive sidebar ===== */
+#archive {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 30;                    /* above the sticky form and toasts */
+    width: 260px;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px 16px;
+    background: rgba(41, 40, 74, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-right: 1px solid var(--line-strong);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
+    transform: translateX(-100%);   /* hidden off the left edge */
+    transition: transform 0.25s ease;
+}
 
-/* ===== Event blocks ===== */
+#archive.open {
+    transform: translateX(0);       /* slides into view */
+}
+
+#archive h2 {
+    margin: 0 0 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+#archive-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font: inherit;
+    font-size: 1.1rem;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+#archive-close:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#archive-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+#archive-list li + li { margin-top: 6px; }
+
+.archive-button {
+    width: 100%;
+    padding: 10px 12px;
+    font: inherit;
+    font-weight: 500;
+    text-align: left;
+    color: var(--text);
+    background: var(--input);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+.archive-button:hover {
+    border-color: var(--accent);
+    background: #323158;
+}
+
+/* ===== Archive toggle button ===== */
+#archive-toggle {
+    display: block;
+    margin: 10px auto 0;
+    height: 40px;
+    padding: 0 20px;
+    font: inherit;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+#archive-toggle:hover {
+    border-color: var(--accent);
+    background: #323158;
+}
 .event {
     position: absolute;
     left: 8px;
