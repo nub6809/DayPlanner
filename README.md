@@ -5,7 +5,7 @@ A one day planner that starts at 12:00 am and ends at 11:59 pm. It lets you lay 
 **Live demo:** https://nub6809.github.io/DayPlanner/
 
 screenshot: 
-(image.png)
+![Day Planner with coloured time blocks](image.png)
 
 features:
 - Add time blocks with a title, start time, end time, and colour
@@ -24,6 +24,7 @@ limitations:
 - archived plans can not be deleted yet
 - single day only
 - very short blocks can result in the x button being cut off
+- requires quite a bit of scrolling to view the whole day plan (for people who dont like scrolling)
 
 about this project:
 me trying to learn JavaScript out of personal curiosity outside my coursework by developing a web project using html css and JavaScript. It is also my first JavaScript project
