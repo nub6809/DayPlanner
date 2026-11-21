@@ -119,4 +119,12 @@ function text_color_for(hex) {
 function save_day_plan() {
     localStorage.setItem("day_plan", JSON.stringify(block_data));
 }
+// button to save the day plan to localStorage
+document.getElementById("save-button").addEventListener("click", function () {
+    save_day_plan();
+    message.textContent = "Day plan saved!";
+    setTimeout(function () {
+        message.textContent = "";
+    }, 2000);
+});
 render_blocks();

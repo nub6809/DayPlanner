@@ -258,7 +258,24 @@ h1 {
 .event:hover .delete-button,
 .delete-button:focus-visible { opacity: 1; }
 .delete-button:hover { background: rgba(0, 0, 0, 0.4); }
-
+#save-button:hover {
+    display: block;
+    margin: 14px auto 0;
+    height: 40px;
+    padding: 0 20px;
+    font: inherit;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+#save-plan:hover {
+    border-color: var(--accent);
+    background: #323158;
+}
 @media (hover: none) {
     .delete-button { opacity: 1; }   /* touch screens can't hover, so always show it */
 }
